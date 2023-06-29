@@ -1,7 +1,37 @@
-﻿
-@{
-    ViewData["Title"] = "Edit";
+﻿@model Category
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h1 class="text-primary" style="font-weight:bolder; font-size:50px">Edit Category</h1>
+            <hr />
+        </div>
+        <div class="mb-3 p-1">
+            @*<label asp-for="Name" class="p-0"></label>*@
+            <input type="text" asp-for="Name" class="form-control" placeholder="Category Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <br />
+        </div>
+        <div class="mb-3 p-1">
+            @*<label asp-for="DisplayOrder" class="p-0"></label>*@
+            <input type="text" asp-for="DisplayOrder" class="form-control" placeholder="Display Order Number" />
+            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+
+            <br />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:150px"> Update </button>
+        <a asp-controller="Category" asp-action="Index" class="btn" style="color:black;text-decoration: none;font-size:30px;margin-left:10px;">Back To List</a>
+        <br /> <br />
+        <h3>
+            
+        </h3>
+
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
 }
-
-<h1>Edit</h1>
-

@@ -1,6 +1,7 @@
 ﻿using BulkyWeb.Context;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BulkyWeb.Controllers
 {
@@ -114,36 +115,33 @@ namespace BulkyWeb.Controllers
         {
             try
             {
-                if (obj.Name != null && obj.DisplayOrder != 0 && obj.Id == 0)
+                if (ModelState.IsValid)
                 {
+                    _db.categories.Update(obj);
+
                     var Name = _db.categories.Where(x => x.Name.ToLower() == obj.Name.ToLower()).FirstOrDefault();
                     var DisplayOrder = _db.categories.Where(x => x.DisplayOrder.ToString() == obj.DisplayOrder.ToString()).FirstOrDefault();
 
-                    if (Name != null || DisplayOrder != null)
+                    if (Name != null && Name.Id != obj.Id)
                     {
-                        if (Name != null)
-                        {
-                            ModelState.AddModelError("Name", "categoty name alredy exsiting.*");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("DisplayOrder", "Display Oreder alredy exsiting.*");
-                        }
+                        ModelState.AddModelError("Name", "categoty name alredy exsiting.*");
+                    }
+                    else if (DisplayOrder != null && DisplayOrder.Id != obj.Id)
+                    {
+                        ModelState.AddModelError("DisplayOrder", "Display Oreder alredy exsiting.*");
                     }
                     else
                     {
-                        _db.categories.Add(obj);
                         _db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                 }
-
                 return View();
             }
             catch (Exception)
             {
                 return RedirectToAction("Index");
-            }
+            } 
         }
     }
 }
