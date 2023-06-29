@@ -30,7 +30,7 @@ namespace BulkyWeb.Controllers
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return RedirectToAction("Index");
@@ -74,6 +74,7 @@ namespace BulkyWeb.Controllers
                     {
                         _db.categories.Add(obj);
                         _db.SaveChanges();
+                        TempData["success"]="Category Created Successfully.";
                         return RedirectToAction("Index");
                     }  
                 }
@@ -96,7 +97,7 @@ namespace BulkyWeb.Controllers
                     return NotFound();
                 }
 
-                Category category = _db.categories.Find(id);
+                Category? category = _db.categories.Find(id);
                 if (category == null)
                 {
                     return NotFound();
@@ -133,6 +134,7 @@ namespace BulkyWeb.Controllers
                     else
                     {
                         _db.SaveChanges();
+                        TempData["success"] = "Category Updated Successfully.";
                         return RedirectToAction("Index");
                     }
                 }
@@ -143,5 +145,55 @@ namespace BulkyWeb.Controllers
                 return RedirectToAction("Index");
             } 
         }
+
+
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                if (id == null || id == 0)
+                {
+                    return NotFound();
+                }
+
+                Category? category = _db.categories.Find(id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                return View(category);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
+
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DetelePOST(int? id)
+        {
+            try
+            {
+                Category? obj = _db.categories.Find(id);
+                if (obj == null)
+                {
+                    TempData["error"] = "Page Not Found";
+                    return NotFound();
+                }
+                else 
+                {
+                    _db.categories.Remove(obj);
+                    _db.SaveChanges();
+                    TempData["success"] = "Category Deleted Successfully.";
+                    return RedirectToAction("Index");   
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }
